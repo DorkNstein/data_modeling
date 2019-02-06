@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-
+import sys
+sys.path.append('../')
 from scikit_scoring import get_classification_values, base_model_classification, draw_confusion_matrices
 
 # data = pd.read_csv('./pcorr/examples/kc_house_data_1.csv')

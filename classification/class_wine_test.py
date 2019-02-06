@@ -1,6 +1,9 @@
 # !#/usr/local/bin/python2
 import numpy as np
 import pandas as pd
+
+import sys
+sys.path.append('../')
 from scikit_scoring import get_classification_values, base_model_classification, draw_confusion_matrices
 
 data = pd.read_csv('../input/winequality-white.csv')
