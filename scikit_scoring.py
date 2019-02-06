@@ -66,8 +66,13 @@ def get_classification_values(data, output):
 
 # """ """ Regression """ """
 
+def get_regression_values(data, output):
+    X_train, X_test, Y_train, Y_test, features, classType = data_cleanup(
+        data, output)
+    get_regression_scores(X_train, X_test, Y_train, Y_test)
 
-def get_regression_scores(X_train, Y_train):
+
+def get_regression_scores(X_train, X_test, Y_train, Y_test):
     pipelines = []
     pipelines.append(('ScaledLR', Pipeline(
         [('Scaler', StandardScaler()), ('LR', LinearRegression())])))

@@ -36,9 +36,9 @@ input/
 # Data files #
 ######################
 *.csv
-*.zip
 *.xlsx
 *.xls
+*.pyc
 
 # OS generated files #
 ######################

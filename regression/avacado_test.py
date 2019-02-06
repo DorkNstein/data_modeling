@@ -2,20 +2,12 @@
 
 import numpy as np
 import pandas as pd
-from sklearn import datasets
-import seaborn as sns
-from sklearn.feature_selection import RFE
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-import os
-import time
+import sys
+sys.path.append('../')
+from scikit_scoring import get_regression_values
 
-# data = pd.read_csv('./pcorr/examples/kc_house_data_1.csv')
 data = pd.read_csv('../input/Regression/avocado.csv')
+output = 'AveragePrice'
 data.head(3)
 print(data.isnull().any())
 print(data.dtypes)
@@ -25,95 +17,15 @@ print(data.dtypes)
 data['Date'] = pd.to_datetime(data['Date'])
 data['year'] = pd.to_datetime(data['year'])
 
-
 data['type_id'] = data['type'].factorize()[0]
 type_id_data = data[['type', 'type_id']].drop_duplicates().sort_values('type_id')
 type_to_id = dict(type_id_data.values)
 id_to_type = dict(type_id_data[['type_id', 'type']].values)
 data.head(5)
 
-# data = data.drop(['4046','4225','4770','Large Bags','Small Bags','XLarge Bags','Total Volume'],axis=1)
-# totalus_data = data.loc[(data['region']) == 'TotalUS']  
-# totalus_data.head(5)
-print(1)
-correlation = data.corr(method = 'pearson')
-columns = correlation.nlargest(10, 'AveragePrice').index
-print(columns)
-columns
-correlation_map = np.corrcoef(data[columns].values.T)
-correlation_map
-print(correlation_map)
-
-X = data[columns]
-target = X['AveragePrice']
-features = X.drop('AveragePrice', axis = 1)
-
-xa = features.describe()
-ya = target.describe()
-print(xa)
-print(ya)
-
-Y = target.values
-X = features.values
-
-
-
-
 # # """ Data analysis """
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.20, random_state = 42)
-
-from sklearn.linear_model import LinearRegression, Ridge, LassoCV, Lasso, LassoLarsCV, ElasticNet, BayesianRidge
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.ensemble import GradientBoostingRegressor, AdaBoostClassifier, RandomForestRegressor
-
-pipelines = []
-pipelines.append(('ScaledLR', Pipeline([('Scaler', StandardScaler()), ('LR', LinearRegression())])))
-pipelines.append(('ScaledRIDGE', Pipeline([('Scaler', StandardScaler()), ('RIDGE', Ridge())])))
-pipelines.append(('ScaledLASSO', Pipeline([('Scaler', StandardScaler()), ('LASSO', Lasso())])))
-pipelines.append(('ScaledLASSOCV', Pipeline([('Scaler', StandardScaler()), ('LASSOCV', LassoCV())])))
-pipelines.append(('ScaledLASSOLarsCV', Pipeline([('Scaler', StandardScaler()), ('LASSOLarsCV', LassoLarsCV())])))
-pipelines.append(('ScaledEN', Pipeline([('Scaler', StandardScaler()), ('EN', ElasticNet())])))
-pipelines.append(('ScaledBAYESIAN', Pipeline([('Scaler', StandardScaler()), ('BAYESIAN', BayesianRidge())])))
-pipelines.append(('ScaledKNN', Pipeline([('Scaler', StandardScaler()), ('KNN', KNeighborsRegressor())])))
-pipelines.append(('ScaledCART', Pipeline([('Scaler', StandardScaler()), ('CART', DecisionTreeRegressor())])))
-pipelines.append(('ScaledGBM', Pipeline([('Scaler', StandardScaler()), ('GBM', GradientBoostingRegressor())])))
-# pipelines.append(('ScaledADA', Pipeline([('Scaler', StandardScaler()), ('ADABOOST', AdaBoostClassifier(base_estimator=RandomForestRegressor(), random_state=0, n_estimators=100))])))
-
-results = []
-names = []
-for name, model in pipelines:
-    ts = time.time()
-    kfold = KFold(n_splits = 10, random_state = 21)
-    cv_results = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'neg_mean_squared_error')
-    cv_results_abs = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'neg_mean_absolute_error')
-    cv_results_sq_log = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'neg_mean_squared_log_error')
-    cv_results_median_abs = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'neg_median_absolute_error')
-    cv_r2 = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'r2')
-    cv_explained_variance = cross_val_score(model, X_train, Y_train, cv = kfold, scoring = 'explained_variance')
-    ts_2 = time.time()
-    results.append(cv_results)
-    names.append(name)
-    msg = "%f (%f)" % (cv_results.mean(), cv_results.std())
-    msg_abs = "%f (%f)" % (cv_results_abs.mean(), cv_results_abs.std())
-    msg_sq_log = "%f (%f)" % (cv_results_sq_log.mean(), cv_results_sq_log.std())
-    msg_median_abs = "%f (%f)" % (cv_results_median_abs.mean(), cv_results_median_abs.std())
-    msg_r2 = "%f (%f)" % (cv_r2.mean(), cv_r2.std())
-    msg_explained_variance = "%f (%f)" % (cv_explained_variance.mean(), cv_explained_variance.std())
-    print(name)
-    print(msg_explained_variance)
-    print(msg_abs)
-    print(msg)
-    print(msg_sq_log)
-    print(msg_median_abs)
-    print(msg_r2)
-    print("%f" % (ts_2 - ts))
-    print('\n')
-
-
-
-
+get_regression_values(data, output)
 
 # from sklearn.model_selection import GridSearchCV
 
