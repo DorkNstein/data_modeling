@@ -33,6 +33,13 @@ input/
 *.sql
 *.sqlite
 
+# Data files #
+######################
+*.csv
+*.zip
+*.xlsx
+*.xls
+
 # OS generated files #
 ######################
 .DS_Store
