@@ -66,6 +66,7 @@ def get_classification_values(data, output):
 
 # """ """ Regression """ """
 
+
 def get_regression_values(data, output):
     X_train, X_test, Y_train, Y_test, features, classType = data_cleanup(
         data, output)
@@ -289,7 +290,7 @@ def get_classification_scores(X_train, X_test, Y_train, Y_test, classType):
             print(roc_auc__score)
             # auc_score
             # fpr, tpr, thresholds = roc_curve(
-                # Y_test, test_predictions, pos_label=None)
+            # Y_test, test_predictions, pos_label=None)
             # auc_score = auc(fpr, tpr)
             # print(format(auc_score))
 

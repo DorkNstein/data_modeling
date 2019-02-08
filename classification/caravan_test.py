@@ -5,7 +5,7 @@ sys.path.append('../')
 from scikit_scoring import get_classification_values, base_model_classification, draw_confusion_matrices
 
 # data = pd.read_csv('./pcorr/examples/kc_house_data_1.csv')
-data = pd.read_csv('../input/caravan-insurance-challenge.csv')
+data = pd.read_csv('../input/classification/caravan-insurance-challenge.csv')
 output = 'CARAVAN'
 
 data.head(3)

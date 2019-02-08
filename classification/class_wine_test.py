@@ -6,7 +6,7 @@ import sys
 sys.path.append('../')
 from scikit_scoring import get_classification_values, base_model_classification, draw_confusion_matrices
 
-data = pd.read_csv('../input/winequality-white.csv')
+data = pd.read_csv('../input/classification/winequality-white.csv')
 output = 'quality'
 data.head(3)
 print(data.isnull().any())
