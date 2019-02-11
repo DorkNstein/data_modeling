@@ -13,7 +13,8 @@ df.rename(columns={'Date': 'ds',
 print(df.head())
 
 
-df2 = df.asfreq(freq='M') # asfreq method is used to convert a time series to a specified frequency. Here it is monthly frequency.
+# asfreq method is used to convert a time series to a specified frequency. Here it is monthly frequency.
+df2 = df.asfreq(freq='M')
 print(df2.head())
 # plt.title('Humidity in Kansas City over time(Monthly frequency)')
 # plt.show()
@@ -34,8 +35,8 @@ m_forecast = m.predict(m_forecast)
 print(m_forecast.head())
 print(m_forecast.tail())
 
-fig = m.plot(m_forecast, xlabel = 'Date', ylabel = 'Stock Price')
-plt.title('Market Cap');
+fig = m.plot(m_forecast, xlabel='Date', ylabel='Stock Price')
+plt.title('Market Cap')
 plt.show()
 
 m.plot_components(m_forecast)

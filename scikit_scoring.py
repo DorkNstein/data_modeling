@@ -241,6 +241,7 @@ def get_classification_scores(X_train, X_test, Y_train, Y_test, classType):
         if (classType == 'binary'):
             print('brier_score:')
             brier_score = brier_score_loss(Y_test, test_predictions)
+            print(brier_score)
             print(format(brier_score))
             f_score = f1_score(Y_test, test_predictions)
 
@@ -248,7 +249,7 @@ def get_classification_scores(X_train, X_test, Y_train, Y_test, classType):
             f_score = f_score_none
 
         print('f1_score:')
-        print(format(f_score))
+        print(f_score)
 
         #     f_score_samples = f1_score(
         #         Y_test, test_predictions, average='samples')
