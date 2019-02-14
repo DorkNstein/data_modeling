@@ -4,6 +4,7 @@
 reports/
 build/
 input/
+.ipynb_checkpoints/
 
 # Compiled source #
 ###################
