@@ -73,6 +73,17 @@ def get_regression_values(data, output):
     get_regression_scores(X_train, X_test, Y_train, Y_test)
 
 
+def decision_tree_regressor_regressor(data, output):
+    X_train, X_test, Y_train, Y_test, features, classType = data_cleanup(
+        data, output)
+    reg = DecisionTreeRegressor()
+    reg.fit(X_train, Y_train)
+    y_predict = reg.predict(X_test)
+    print(y_predict)
+    return y_predict
+
+
+
 def get_regression_scores(X_train, X_test, Y_train, Y_test):
     pipelines = []
     pipelines.append(('ScaledLR', Pipeline(
