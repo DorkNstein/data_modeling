@@ -78,9 +78,13 @@ def decision_tree_regressor_regressor(data, output):
         data, output)
     reg = DecisionTreeRegressor()
     reg.fit(X_train, Y_train)
+    print("model")
+    print(reg)
+    # if (predict_x):
+    #     y_predict = reg.predict(predict_x)
+    # else:
     y_predict = reg.predict(X_test)
-    print(y_predict)
-    return y_predict
+    return y_predict, X_test, Y_test
 
 
 

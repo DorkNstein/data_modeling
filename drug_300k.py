@@ -13,7 +13,7 @@ df = pd.read_csv('input/drug_purchase_300K_d.csv',
                  delimiter="|", header=None, parse_dates=[19])
 df.columns = ['memberid', 'memberage', 'membergender', 'pharmacyname', 'pharmcity', 'pharmacystate', 'pharmzip', 'pharmlat', 'pharmlong', 'ndc11code',
               'drug_productname', 'drug_ahfsclass', 'drug_shortname', 'drug_indication', 'calcawpunitprice', 'drug_qty', 'daysupply', 'calcawpfullprice', 'netplancost', 'filldate']
-output = 'netplancost'
+
 
 df[['fillmonth', 'fillyear']] = df['filldate'].apply(
     lambda x: pd.Series(x.strftime("%Y-%m,%Y").split(",")))
@@ -44,23 +44,27 @@ df_2['memberage'] = df_2['memberage'].astype('str').astype('int64')
 df_2['gender_factor'] = df_2['gender_factor'].astype('str').astype('int64')
 df_2['lasting_factor'] = df_2['lasting_factor'].astype('str').astype('int64')
 
-df_2['pharmzip'] = df_2['pharmzip'].apply(
-    lambda x: x if x.isdigit() else 0)
-df_2['pharmzip'] = df_2['pharmzip'].astype('str').astype('int64')
+# df_2['pharmzip'] = df_2['pharmzip'].apply(
+#     lambda x: x if x.isdigit() else 0)
+# df_2['pharmzip'] = df_2['pharmzip'].astype('str').astype('int64')
 # display(df_2.dtypes)
 
 df_2['state'] = df_2['pharmacystate'].factorize()[0]
 state_df_2 = df_2[['pharmacystate', 'state']
-                   ].drop_duplicates().sort_values('state')
+                  ].drop_duplicates().sort_values('state')
 pharmacystate_to_state = dict(state_df_2.values)
 state_to_pharmacystate = dict(state_df_2[['state', 'pharmacystate']].values)
 
 
-df_3 = df_2[['netplancost', 'lasting_factor', 'memberage',
-             'gender_factor', 'pharmzip', 'state']]
+# df_3 = df_2[['netplancost', 'lasting_factor', 'memberage',
+#              'gender_factor', 'pharmzip', 'state']]
+# output = 'netplancost'
 
-print(df_3.info())
+df_3 = df_2[['netplancost', 'memberage',
+             'gender_factor', 'state']]
 
+df_3['plancost_factor'] = df_3['netplancost'] * df_2['lasting_factor']
+output = 'plancost_factor'
 
 
 ### ************ REGRESSION ****************** ########
@@ -68,13 +72,21 @@ print(df_3.info())
 # print(df_2.groupby(['pharmacystate'])['state'])
 # get_regression_values(df_3, output)
 
-#### Inputs: lasting_factor, memberage, gender_factor, pharmzip, state
-predicted_y = decision_tree_regressor_regressor(
-    df_3, output, predict_X=[[0, 28, 2, 75002, 0]])
-# print(predicted_y[0])
+# ''''' Inputs: lasting_factor, memberage, gender_factor, pharmzip, state '''''''
+y_predict, X_test, Y_test = decision_tree_regressor_regressor(
+    df_3, output)
+# print(predicted_y)
 
+count = 0
+# for x in np.nditer(y_predict, order='C'):
+#     print(x)
+#     count += 1
+#     if (count == 100):
+#         break
 
-
+for i in range(100):
+    print("{0} === {1}, diff: {3} inputs:{2}".format(
+        y_predict[i], Y_test[i], X_test[i], Y_test[i] - y_predict[i]))
 
 
 ### ************ PROPHET ****************** ########
@@ -103,8 +115,6 @@ predicted_y = decision_tree_regressor_regressor(
 
 # m.plot_components(m_forecast)
 # plt.show()
-
-
 
 
 ##### ******************** TIME ******************** ######
