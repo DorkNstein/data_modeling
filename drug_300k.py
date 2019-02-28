@@ -61,7 +61,7 @@ state_to_pharmacystate = dict(state_df_2[['state', 'pharmacystate']].values)
 # output = 'netplancost'
 
 df_3 = df_2[['netplancost', 'memberage',
-             'gender_factor', 'state']]
+             'gender_factor', 'state', 'calcawpfullprice']]
 
 df_3['plancost_factor'] = df_3['netplancost'] * df_2['lasting_factor']
 output = 'plancost_factor'
@@ -85,8 +85,9 @@ count = 0
 #         break
 
 for i in range(100):
-    print("{0} === {1}, diff: {3} inputs:{2}".format(
-        y_predict[i], Y_test[i], X_test[i], Y_test[i] - y_predict[i]))
+    diff = Y_test[i] - y_predict[i]
+    print("diff: {3} \t {0} === {1}, \tinputs:{2}".format(
+        y_predict[i], Y_test[i], X_test[i], diff if diff > 0.001 else 0))
 
 
 ### ************ PROPHET ****************** ########
